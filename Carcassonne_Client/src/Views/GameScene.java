@@ -64,9 +64,9 @@ public class GameScene extends Scene {
 	 *
 	 * @param menuController Geef MenuController mee
 	 */
-	public GameScene(MenuController menuController, int breedte, int hoogte) {
+	public GameScene(MenuController menuController) {
 		//	super(new Pane(), 1280, 720);
-		super(new Pane(), breedte, hoogte);
+		super(new Pane());
 		getStylesheets().add("style.css");
 		this.breedte = breedte;
 		this.hoogte = hoogte;
@@ -471,19 +471,27 @@ public class GameScene extends Scene {
 	public void switchFullScreenMode(){
 		controller.getGameStage().setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
 		controller.getGameStage().setFullScreenExitHint(null);
-		controller.getGameStage().setFullScreen(SettingsScene.optieFullscreen);
+
+
 		if (SettingsScene.optieFullscreen == true){
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			double schermBreedte = screenSize.getWidth();
 			double schermHoogte = screenSize.getHeight();
-
+			controller.getGameStage().setHeight(1280);
+			controller.getGameStage().setWidth(1920);
+			controller.getGameStage().setFullScreen(true);
 			mainPane.setMinSize(schermBreedte, schermHoogte);
 			getStylesheets().add("FullscreenStyle.css");
 			getStylesheets().remove("style.css");
-		}else {
+		}
+		if(SettingsScene.optieFullscreen == false) {
 			getStylesheets().add("style.css");
 			getStylesheets().remove("FullscreenStyle.css");
 			mainPane.setMinSize(breedte, hoogte);
+			controller.getGameStage().setHeight(720);
+			controller.getGameStage().setWidth(1280);
+			controller.getGameStage().setFullScreen(false);
 		}
+
 	}
 }

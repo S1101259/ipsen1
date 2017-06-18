@@ -48,7 +48,7 @@ public class MenuController {
 
 		this.gameStage = gameStage;
 		endGameScene = new EndGameScene(this);
-		gameScene = new GameScene(this, breedte, hoogte);
+		gameScene = new GameScene(this);
 		lobbyScene = new LobbyScene(this, lobbyController);
 		menuViewScene = new MenuViewScene(this);
 		preLobbyScene = new PreLobbyScene(this, lobbyController);

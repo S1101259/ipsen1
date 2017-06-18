@@ -44,7 +44,8 @@ public class ClientManager extends Application {
 
 			primaryStage.setResizable(false);
 	}*/
-
+		primaryStage.setWidth(1280);
+		primaryStage.setHeight(720);
 		runClient(primaryStage);
 
 	}
