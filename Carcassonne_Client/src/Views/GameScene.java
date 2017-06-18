@@ -513,4 +513,22 @@ public class GameScene extends Scene {
 			mainPane.setMinSize(breedte, hoogte);
 		}
 	}
+
+	public void setHorigeUpdate(GameClient client){
+		if(client.getAantalHorigeBeschikbaar() != getHorigeUI()) {
+			horigeViews[getHorigeUI() + 1].setId(spelerKleur);
+		}
+	}
+
+	public int  getHorigeUI() {
+		int x = 0;
+
+		for (int i = 0; i < 7; i++) {
+			if (horigeViews[i].getId().equals(spelerKleur)) {
+				x++;
+			}
+		}
+		return x;
+	}
+
 }

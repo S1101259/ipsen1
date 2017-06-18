@@ -36,13 +36,14 @@ public class GameClient {
 
 	private AudioClip turnSound = new AudioClip(Paths.get("Sounds/battleHorn.mp3").toUri().toString());
 
+
 	private int aantalHorigeBeschikbaar;
 
 
 	/**
 	 * Constructor van GameClient
-	 * @param view
-	 * Geef de GameScene mee als view
+	 *
+	 * @param view Geef de GameScene mee als view
 	 */
 	public GameClient(GameScene view) {
 		this.view = view;
@@ -50,8 +51,8 @@ public class GameClient {
 
 	/**
 	 * Deze functie MOET gerunt worden als de speler de game joint, dit start de thread en set de spelernaam.
-	 * @param spelerNaam
-	 * Geef de spelernaam mee in de vorm van een String
+	 *
+	 * @param spelerNaam Geef de spelernaam mee in de vorm van een String
 	 */
 	public void Join(String spelerNaam) {
 		this.spelerNaam = spelerNaam;
@@ -74,7 +75,7 @@ public class GameClient {
 	 * Deze functie zorgt ervoor dat de beurt van de speler beeindigt wordt
 	 */
 	public void beeindigBeurt() {
-		if(kaartGeplaatst == true){
+		if (kaartGeplaatst == true) {
 			try {
 				RmiStub.beeindigenBeurt(spelerNaam);
 				view.verwijdwerHorigePreviews();
@@ -83,6 +84,7 @@ public class GameClient {
 			}
 		}
 	}
+
 
 	/**
 	 * Pak een kaart van de stapel, dit kan alleen als de speler aan de beurt is
@@ -93,7 +95,7 @@ public class GameClient {
 				meepMerp.play();
 				return;
 			}
-			if(kaartGepakt == false) {
+			if (kaartGepakt == false) {
 				String id = RmiStub.pakKaart(spelerNaam);
 				kaartGepakt = true;
 				kaartPlaatsId = id;
@@ -108,6 +110,7 @@ public class GameClient {
 
 	/**
 	 * Plaats de kaart in de view
+	 *
 	 * @param x coordinaat
 	 * @param y coordinaat
 	 */
@@ -117,8 +120,7 @@ public class GameClient {
 				view.plaatsKaart(this, x, y);
 				kaartGeplaatst = true;
 				kaartPlaatsId = "";
-			}
-			else {
+			} else {
 				meepMerp.play();
 			}
 		} catch (RemoteException e1) {
@@ -131,9 +133,9 @@ public class GameClient {
 	 */
 	public void draaiKaart() {
 		try {
-		if(RmiStub.draaiKaart(spelerNaam)){
-			view.DraaiKaart();
-		}
+			if (RmiStub.draaiKaart(spelerNaam)) {
+				view.DraaiKaart();
+			}
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -141,13 +143,14 @@ public class GameClient {
 
 	/**
 	 * Plaats horige op positie
-	 * @param posities
-	 * Geef de positie mee van de horige
+	 *
+	 * @param posities Geef de positie mee van de horige
 	 */
 	public void plaatsHorige(Horige.Posities posities) {
 		try {
 			RmiStub.plaatsHorige(posities);
 			getGameScene().setHorigeUsed();
+			getGameScene().setHorigeUpdate(this);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -155,8 +158,8 @@ public class GameClient {
 
 	/**
 	 * Set RmiStub
-	 * @param rmiController
-	 * geef een RMIInterface mee.
+	 *
+	 * @param rmiController geef een RMIInterface mee.
 	 */
 	public void setRmiStub(RMIInterface rmiController) {
 		RmiStub = rmiController;
@@ -165,17 +168,18 @@ public class GameClient {
 
 	/**
 	 * Deze functie geeft de RMIStub terug
+	 *
 	 * @return RmiStub
 	 * De RMIStub wordt teruggegeven
 	 */
-	public RMIInterface getRmiStub(){
+	public RMIInterface getRmiStub() {
 		return RmiStub;
 	}
 
-		/**
-		 * De client wordt elke x ms geīüpdatet, als de beurt op de server hoger is dan de beurt op de client betekent dat en
-		 * speler klaar is met zijn beurt, en het spelbord geüpdatet moet worden.
-		 */
+	/**
+	 * De client wordt elke x ms geīüpdatet, als de beurt op de server hoger is dan de beurt op de client betekent dat en
+	 * speler klaar is met zijn beurt, en het spelbord geüpdatet moet worden.
+	 */
 	public void Update() {
 
 		try {
@@ -188,16 +192,16 @@ public class GameClient {
 				spelerBeurt = RmiStub.getPlayerBeurt();
 				aantalHorigeBeschikbaar = RmiStub.getAvailableHorige(spelerNaam);
 				System.out.println(aantalHorigeBeschikbaar);
-			if(SettingsScene.optieGeluid) {
-				if (spelerBeurt.equals(spelerNaam)) {
-					turnSound.setVolume(0.5);
-					turnSound.play();
+				if (SettingsScene.optieGeluid) {
+					if (spelerBeurt.equals(spelerNaam)) {
+						turnSound.setVolume(0.5);
+						turnSound.play();
+					}
 				}
 			}
-			}
 
 
-			if(verwijderHorige != null) {
+			if (verwijderHorige != null) {
 				for (Point point : verwijderHorige) {
 					view.removeHorige(point.getX(), point.getY());
 				}
@@ -220,8 +224,8 @@ public class GameClient {
 
 	/**
 	 * Deze functie geeft de laast geplaatste kaart terugg
-	 * @return
-	 * Geeft laatst geplaatste kaart terug mits hij verbinding kan maken met de server. anders geeft hij null terug.
+	 *
+	 * @return Geeft laatst geplaatste kaart terug mits hij verbinding kan maken met de server. anders geeft hij null terug.
 	 * @throws RemoteException
 	 */
 	public TileStump getTile() throws RemoteException {
@@ -235,20 +239,30 @@ public class GameClient {
 
 	/**
 	 * Deze functie geeft de view terug.
+	 *
 	 * @return view
 	 * Geeft GameScene view terug
 	 */
-	public GameScene getGameScene(){return view;}
+	public GameScene getGameScene() {
+		return view;
+	}
 
 	/**
 	 * Deze functie geeft de spelernaam terug
+	 *
 	 * @return spelerNaam
 	 * Geeft de spelernaam terug in de vorm van een String
 	 */
-	public String getSpelerBeurt() { return spelerBeurt; }
+	public String getSpelerBeurt() {
+		return spelerBeurt;
+	}
 
-	public String getSpelerNaam(){
-	return spelerNaam;
+	public String getSpelerNaam() {
+		return spelerNaam;
+	}
+
+
+	public int getAantalHorigeBeschikbaar() {
+		return aantalHorigeBeschikbaar;
 	}
 }
-
