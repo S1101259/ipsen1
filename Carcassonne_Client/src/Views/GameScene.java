@@ -469,8 +469,7 @@ public class GameScene extends Scene {
 	}
 
 	public void switchFullScreenMode(){
-		controller.getGameStage().setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-		controller.getGameStage().setFullScreenExitHint(null);
+
 
 
 		if (SettingsScene.optieFullscreen == true){
@@ -485,12 +484,14 @@ public class GameScene extends Scene {
 			getStylesheets().remove("style.css");
 		}
 		if(SettingsScene.optieFullscreen == false) {
+			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			getStylesheets().add("style.css");
 			getStylesheets().remove("FullscreenStyle.css");
-			mainPane.setMinSize(breedte, hoogte);
+			double schermBreedte = screenSize.getWidth();
+			double schermHoogte = screenSize.getHeight();
 			controller.getGameStage().setHeight(720);
 			controller.getGameStage().setWidth(1280);
-			controller.getGameStage().setFullScreen(false);
+			mainPane.setMaxSize(schermBreedte, schermHoogte);
 		}
 
 	}
